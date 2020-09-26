@@ -23,7 +23,7 @@ export default class FormatFilesComponent extends React.Component {
                 </Card>
 
                 <Row className="mt-5 justify-content-between">
-                    <Button><Link to="/upload/1">Previous Step</Link></Button>
+                    <Button><Link to="/upload/1">Prev Step</Link></Button>
                     <Button><Link to="/upload/3">Next Step</Link></Button>
                 </Row>
             </Container>

@@ -9,20 +9,25 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
 
+import {Link} from 'react-router-dom'
+import qrcode from './download.png'
+
 export default class DisplayComponent extends React.Component {
     render() {
         return(
-            <Container className="pt-5 justify-content-center">
-                <h1 className="text-center">Insert the big QR code here</h1>
-                <Image></Image>
-                <Row>
-                    <h1>Download</h1>
-                    <h1>Share</h1>
+            <Container className="pt-5 my-auto justify-content-center align-items-center">
+                <h1 className="text-center">You're All Set!</h1>
+                <Row className="justify-content-around">
+                    <Image className="mx-auto my-5 col-md-3" src={qrcode}></Image>
                 </Row>
-                <Row>
-                    <h1>Email</h1>
-                    <h1>Share</h1>
+                <Row className="justify-content-center">
+                <Button className="mx-auto align-self-center">
+                    <Link to="/">
+                        Home
+                    </Link>
+                </Button>
                 </Row>
+
             </Container>
             
         )

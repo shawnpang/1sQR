@@ -41,10 +41,10 @@ export default class UploadConfirmComponent extends React.Component {
 
                 <Row className="container justify-content-between">
                     <Button className="">
-                        <Link to="/upload/2">Previous Step</Link>
+                        <Link to="/upload/2">Prev Step</Link>
                     </Button>
                     <Button className="">
-                        <Link to="/display">Launch Your Menu</Link>
+                        <Link to="/display">Launch</Link>
                     </Button>
                 </Row>
             </Container>

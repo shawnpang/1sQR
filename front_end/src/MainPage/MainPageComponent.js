@@ -12,10 +12,11 @@ export default class MainPageComponent extends React.Component {
     render() {
         let title = [`Digitalize Your Menu and Flyers`, <br />, `Within Seconds at No Cost`]
         return (
-            <Container fluid className="align-self-center justify-content-center text-center">
-                <Image className="m-5" src={process.env.PUBLIC_URL + '/logo_light.svg'}></Image>
+            <Container fluid className="my-auto align-self-center justify-content-center text-center">
+                <Image className="m-5 col-8 col-md-3" src={process.env.PUBLIC_URL + '/logo_light.svg'}></Image>
+
                 <h1>{title}</h1>
-                <Col md={6} className="mx-auto ">
+                <Col xs={8} md={4} className="mx-auto ">
                     <p className="text-center">
                         1sQR helps restauranters turn their
                         physical promotional assets into online contents

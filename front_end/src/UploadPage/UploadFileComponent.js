@@ -10,7 +10,6 @@ import Form from 'react-bootstrap/Form'
 import FilePreview from 'react-preview-file'
 
 import { Link } from 'react-router-dom'
-import { useDropzone } from 'react-dropzone'
 
 export default class UploadFileComponent extends React.Component {
     constructor(props) {
@@ -35,9 +34,6 @@ export default class UploadFileComponent extends React.Component {
 
         });
 
-        // formData.append("file", files[0])
-
-        // Display the key/value pairs
         for (var pair of formData.entries()) {
             console.log(pair[1]);
         }
@@ -56,16 +52,6 @@ export default class UploadFileComponent extends React.Component {
     }
 
     render() {
-        // const { acceptedFiles, getRootProps, getInputProps, } = useDropzone({
-        //     accept: 'image/jpeg, image/png, image/pdf',
-        //     multiple: true
-        // });
-
-        // const files = acceptedFiles.map(file => (
-        //     <li key={file.path}>
-        //         {file.path} - {file.size} bytes
-        //     </li>
-        // ));
         return (
             <Container>
                 <h1>Upload your menu</h1>
@@ -79,7 +65,32 @@ export default class UploadFileComponent extends React.Component {
                     </Button>
                     </Card>
                 </Form>
+
+                <Row className="m-5 d-flex flex-wrap">
+                    <Col xs={12} md={4}>
+                        <h1>Some text here</h1>
+                        <p>Some details here</p>
+                    </Col>
+                    <Col xs={12} md={4}>
+                        <h1>Some text here</h1>
+                        <p>Some details here</p>
+                    </Col>
+                    <Col xs={12} md={4}>
+                        <h1>Some text here</h1>
+                        <p>Some details here</p>
+                    </Col>
+                </Row>
+
+                <Row className="justify-content-between d-flex">
+                    <Button>
+                        <Link to="/">Home</Link>
+                    </Button>
+                    <Button>
+                        <Link to="/upload/2">Next Step</Link>
+                    </Button>
+                </Row>
             </Container>
         )
     }
+
 }

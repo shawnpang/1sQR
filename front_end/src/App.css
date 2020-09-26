@@ -4,9 +4,5 @@
 
 .main-body {
   height: 100vh;
-  background-image: url(./background.svg);
-  background-repeat: no-repeat;
-  background-size: 125%;
-  background-position: center;
-
+  width: 100vw;
 }

@@ -13,7 +13,7 @@ import DisplayComponent from './DisplayComponent/DisplayComponent';
 function App() {
 	return (
 		<Container fluid className="main-body w-100">
-			<Container fluid className="h-100 d-flex">
+			<Container fluid className="h-100 d-block">
 				<Switch>
 					<Route path="/upload">
 						<UploadComponent/>
