@@ -134,5 +134,5 @@ api.add_resource(View, "/view/<int:id>")
 api.add_resource(Manage, "/manage/<int:id>")
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')
     print("Done!")
