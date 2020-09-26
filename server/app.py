@@ -3,12 +3,12 @@ from flask import Flask, request
 from flask_restful import Api, Resource, reqparse, abort, fields, marshal_with
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
+from image import convertImagesToPDF
 
 # Initialize the REST app and database
 app = Flask(__name__)
 api = Api(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data/media_database.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 UPLOAD_DIRECTORY = "./images"
 db = SQLAlchemy(app)
 
@@ -48,28 +48,30 @@ last_id = 0
 
 
 class Upload(Resource):
-    def get(self):
-        return {"msg":"hiii"}
-
+    @marshal_with(resource_fields)
     def post(self):
-        id = last_id+1
+        # Check if the files are uploaded (maybe also check if image exists?)
         if not request.files:
             abort(400, message="image should be uploaded")
-        else:
-            image = request.files['image']
-            file_name = secure_filename(image.filename)
-            image.save(os.path.join(UPLOAD_DIRECTORY, file_name))
+
+        # Generate an ID for the new uploaded media
+        id = last_id + 1
+
+        # Save all the images in the cache folder
+        image = request.files['image']
+        file_name = secure_filename(image.filename)
+        image.save(os.path.join(UPLOAD_DIRECTORY, file_name))
+
+        image_address = []
+
+        # Call image converting function to convert pages
+        pdf_file_address = convertImagesToPDF(image_address)
 
 
-        # args = video_put_args.parse_args()
-        # result = VideoModel.query.filter_by(id=video_id).first()
-        # if result:
-        #     abort(409, message="video id is taken")
-        #
-        # video = VideoModel(id=video_id, name=args['name'], views=args['views'], likes=args['likes'])
-        # db.session.add(video)
-        # db.session.commit()
-        return {'uploaded':file_name}, 201
+        media = MediaModel(id=id, name="", views=0, access_code = "", file_address=pdf_file_address)
+        db.session.add(media)
+        db.session.commit()
+        return media, 201
 
 
 api.add_resource(Upload, "/upload")
