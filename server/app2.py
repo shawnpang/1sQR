@@ -16,6 +16,7 @@ UPLOAD_DIRECTORY = "./images"
 db = SQLAlchemy(app)
 
 
+
 # Define the structure for the database that stores all the media
 class MediaModel(db.Model):
     # ID is the randomly assigned unique index of the media
@@ -53,6 +54,10 @@ last_id = 0
 upload_parser = reqparse.RequestParser()
 upload_parser.add_argument('img', type=FileStorage,
                          location='files', help="please upload img")
+
+class Test(Resource):
+    def get(self):
+        return{"hiii":"this works"}
 
 
 # Use Case 1 - Upload images to create the media
@@ -132,6 +137,8 @@ class Manage(Resource):
 api.add_resource(Upload, "/upload")
 api.add_resource(View, "/view/<int:id>")
 api.add_resource(Manage, "/manage/<int:id>")
+api.add_resource(Test, "/test")
+
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0')
