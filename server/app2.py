@@ -4,6 +4,9 @@ from flask_restful import Api, Resource, reqparse, abort, fields, marshal_with
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 from image import convertImagesToPDF
+from werkzeug.datastructures import FileStorage
+import tarfile
+
 
 # Initialize the REST app and database
 app = Flask(__name__)
@@ -46,35 +49,62 @@ resource_fields = {
 #test - should not be used
 last_id = 0
 
+# Parsers
+upload_parser = reqparse.RequestParser()
+upload_parser.add_argument('img', type=FileStorage,
+                         location='files', help="please upload img")
+
+
 # Use Case 1 - Upload images to create the media
 class Upload(Resource):
+
     @marshal_with(resource_fields)
     def post(self):
-        # Check if the files are uploaded (maybe also check if image exists?)
-        if not request.files:
-            abort(400, message="image should be uploaded")
+        print("POST Method")
 
-        # Generate an ID for the new uploaded media
-        id = last_id + 1
-
-        #CHECK HERE!!!!!
-        # Save all the images in the cache folder
-        image = request.files['image']
-        file_name = secure_filename(image.filename)
-        image.save(os.path.join(UPLOAD_DIRECTORY, file_name))
-
-        images_address = []
-        # Example:
-        # [0:"cache/IMAGE888.jpg",1:"cache/SHAWN.jpg"]
-
-        # Call image converting function to convert pages
-        pdf_file_address = convertImagesToPDF(images_address)
+        files = request.files
+        image_order = {}
+        for each in files:
+            image = files[each]
+            filename = secure_filename(image.filename)
+            image.save(os.path.join('cache/',filename))
+            image_order[int(each)] = filename
+            print(image_order)
 
 
-        media = MediaModel(id=id, name="", views=0, access_code = "", file_address=pdf_file_address)
-        db.session.add(media)
-        db.session.commit()
-        return media, 201
+        # args = upload_parser.parse_args()
+        # content = args.get('img')
+
+
+        # filename = secure_filename(content.filename)
+        # content.save(os.path.join('cache/',filename))
+
+        return {'hello':'it works'}
+        # # Check if the files are uploaded (maybe also check if image exists?)
+        # if not request.files:
+        #     abort(400, message="image should be uploaded")
+        #
+        # # Generate an ID for the new uploaded media
+        # id = last_id + 1
+        #
+        # #CHECK HERE!!!!!
+        # # Save all the images in the cache folder
+        # image = request.files['image']
+        # file_name = secure_filename(image.filename)
+        # image.save(os.path.join(UPLOAD_DIRECTORY, file_name))
+        #
+        # images_address = []
+        # # Example:
+        # # [0:"cache/IMAGE888.jpg",1:"cache/SHAWN.jpg"]
+        #
+        # # Call image converting function to convert pages
+        # pdf_file_address = convertImagesToPDF(images_address)
+        #
+        #
+        # media = MediaModel(id=id, name="", views=0, access_code = "", file_address=pdf_file_address)
+        # db.session.add(media)
+        # db.session.commit()
+        # return media, 201
 
 
 # Use Case 2 - access the uploaded media
@@ -100,8 +130,8 @@ class Manage(Resource):
 
 
 api.add_resource(Upload, "/upload")
-api.add_resource(View, "/view/<Integer:id>")
-api.add_resource(Manage, "/manage/<Integer:id>")
+api.add_resource(View, "/view/<int:id>")
+api.add_resource(Manage, "/manage/<int:id>")
 
 if __name__ == "__main__":
     app.run(debug=True)
