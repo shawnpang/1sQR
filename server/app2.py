@@ -60,9 +60,7 @@ class Test(Resource):
 
 # Use Case 1 - Upload images to create the media
 class Upload(Resource):
-
     def post(self):
-
         print("POST Method")
         id = 1000
         last_entry = MediaModel.query.order_by(MediaModel.id.desc()).first()
@@ -84,14 +82,14 @@ class Upload(Resource):
         convert_images_to_PDF(img_dic= image_order,id=id)
         clean_cache()
 
-
+        # Add the media entry to database
         media = MediaModel(id=id, title ="", views=0, access_code = "",
                            file_address="media/"+str(id)+"pdf")
         db.session.add(media)
         db.session.commit()
 
-
-        return {'hello':'it works'}
+        # Return success
+        return 201
 
 
 # Use Case 2 - access the uploaded media
