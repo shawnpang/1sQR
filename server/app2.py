@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 from image import convert_images_to_PDF, clean_cache
 from werkzeug.datastructures import FileStorage
-
+from flask_cors import CORS, cross_origin
 
 # Initialize the REST app and database
 app = Flask(__name__)
@@ -13,8 +13,8 @@ api = Api(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data/media_database.db'
 UPLOAD_DIRECTORY = "./images"
 db = SQLAlchemy(app)
-
-
+cors = CORS(app, resources={r'/*': {"origins": '*'}})
+app.config['CORS_HEADER'] = 'Content-Type'
 
 # Define the structure for the database that stores all the media
 class MediaModel(db.Model):
