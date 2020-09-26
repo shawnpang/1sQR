@@ -46,7 +46,7 @@ resource_fields = {
 #test - should not be used
 last_id = 0
 
-
+# Use Case 1 - Upload images to create the media
 class Upload(Resource):
     @marshal_with(resource_fields)
     def post(self):
@@ -76,8 +76,32 @@ class Upload(Resource):
         db.session.commit()
         return media, 201
 
-api.add_resource(Upload, "/upload")
 
+# Use Case 2 - access the uploaded media
+class View(Resource):
+    pass
+
+
+# Use Case 3 - manage the media with access code to update or delete
+class Manage(Resource):
+    @marshal_with(resource_fields)
+
+    # Update the media title or pdf file with id and access code
+    def put(self, id):
+        pass
+
+
+    # Permanently delete the media with id and access code
+    def delete(self, id):
+        pass
+
+
+
+
+
+api.add_resource(Upload, "/upload")
+api.add_resource(View, "/view/<Integer:id>")
+api.add_resource(Manage, "/manage/<Integer:id>")
 
 if __name__ == "__main__":
     app.run(debug=True)
