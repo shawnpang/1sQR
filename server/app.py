@@ -8,7 +8,7 @@ from werkzeug.datastructures import FileStorage
 from flask_cors import CORS, cross_origin
 
 # Initialize the REST app and database
-app = Flask(__name__)
+app = Flask(__name__, static_folder='../front_end/build', static_url_path='')
 api = Api(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data/media_database.db'
 UPLOAD_DIRECTORY = "./images"
@@ -33,8 +33,9 @@ class MediaModel(db.Model):
 # This will only create the database in first run and ignored if the database already exists
 db.create_all()
 
-
-
+@app.route('/')
+def index():
+    return app.send_static_file('index.html')
 
 # Serialization template for each entry in the database
 resource_fields = {
