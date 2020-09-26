@@ -1,9 +1,10 @@
 import sys, fitz
+import os
 
-def convertImagesToPDF(img_dic, id):
+def convert_images_to_PDF(img_dic, id):
     img_list = []
     for each in sorted(img_dic.keys()):
-        img_list.append(img_dict[each])
+        img_list.append(img_dic[each])
 
 
     doc = fitz.open()  # PDF with the pictures
@@ -19,11 +20,18 @@ def convertImagesToPDF(img_dic, id):
         # image fills the page
     doc.save("cache/"+str(id)+".pdf")
 
+def clean_cache():
+    # Remove all image files
+    for file in os.listdir('cache'):
+        if file.endswith('.png'):
+            os.remove("cache/"+file)
+
+        if file.endswith(".pdf"):
+            os.rename("cache/"+file, "media/"+file)
+
+    # Move the pdf media to media folder
 
 
 
 if __name__ == "__main__":
-    img_dict = {0:"cache/sample.png",
-                1:"cache/sample2.png",}
-    id = 1111
-    convertImagesToPDF(img_dict,id)
+    clean_cache()

@@ -3,7 +3,7 @@ from flask import Flask, request
 from flask_restful import Api, Resource, reqparse, abort, fields, marshal_with
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
-from image import convertImagesToPDF
+from image import convert_images_to_PDF, clean_cache
 from werkzeug.datastructures import FileStorage
 import tarfile
 
@@ -19,15 +19,11 @@ db = SQLAlchemy(app)
 
 # Define the structure for the database that stores all the media
 class MediaModel(db.Model):
-    # ID is the randomly assigned unique index of the media
+    # Define the fields of the database
     id = db.Column(db.Integer, primary_key=True)
-    # File address is the relative file address of the media's pdf file
     file_address = db.Column(db.String(150), nullable=False)
-    # Access code is the only and non-changeable credentials to manage the media
     access_code = db.Column(db.String(20), nullable=False)
-    # Title is the title of the pdf file
     title = db.Column(db.String(100), nullable=False)
-    # Views is the count of visits to that media's page
     views = db.Column(db.Integer, nullable=False)
 
     # Create a string representation of the data entry
@@ -38,6 +34,9 @@ class MediaModel(db.Model):
 # This will only create the database in first run and ignored if the database already exists
 db.create_all()
 
+
+
+
 # Serialization template for each entry in the database
 resource_fields = {
     'id': fields.Integer,
@@ -47,8 +46,7 @@ resource_fields = {
     'file_address':fields.String
 }
 
-#test - should not be used
-last_id = 0
+
 
 # Parsers
 upload_parser = reqparse.RequestParser()
@@ -63,53 +61,37 @@ class Test(Resource):
 # Use Case 1 - Upload images to create the media
 class Upload(Resource):
 
-    @marshal_with(resource_fields)
     def post(self):
-        print("POST Method")
 
+        print("POST Method")
+        id = 1000
+        last_entry = MediaModel.query.order_by(MediaModel.id.desc()).first()
+        if last_entry:
+            print("Last id is = ",last_entry.id)
+            id = last_entry.id+1
+
+        # Save all the upload images
         files = request.files
         image_order = {}
         for each in files:
             image = files[each]
             filename = secure_filename(image.filename)
             image.save(os.path.join('cache/',filename))
-            image_order[int(each)] = filename
+            image_order[int(each)] = os.path.join('cache/',filename)
             print(image_order)
 
+        # convert the images to pdf and move to the media folder
+        convert_images_to_PDF(img_dic= image_order,id=id)
+        clean_cache()
 
-        # args = upload_parser.parse_args()
-        # content = args.get('img')
 
+        media = MediaModel(id=id, title ="", views=0, access_code = "",
+                           file_address="media/"+str(id)+"pdf")
+        db.session.add(media)
+        db.session.commit()
 
-        # filename = secure_filename(content.filename)
-        # content.save(os.path.join('cache/',filename))
 
         return {'hello':'it works'}
-        # # Check if the files are uploaded (maybe also check if image exists?)
-        # if not request.files:
-        #     abort(400, message="image should be uploaded")
-        #
-        # # Generate an ID for the new uploaded media
-        # id = last_id + 1
-        #
-        # #CHECK HERE!!!!!
-        # # Save all the images in the cache folder
-        # image = request.files['image']
-        # file_name = secure_filename(image.filename)
-        # image.save(os.path.join(UPLOAD_DIRECTORY, file_name))
-        #
-        # images_address = []
-        # # Example:
-        # # [0:"cache/IMAGE888.jpg",1:"cache/SHAWN.jpg"]
-        #
-        # # Call image converting function to convert pages
-        # pdf_file_address = convertImagesToPDF(images_address)
-        #
-        #
-        # media = MediaModel(id=id, name="", views=0, access_code = "", file_address=pdf_file_address)
-        # db.session.add(media)
-        # db.session.commit()
-        # return media, 201
 
 
 # Use Case 2 - access the uploaded media
