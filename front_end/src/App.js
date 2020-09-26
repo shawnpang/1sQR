@@ -3,11 +3,12 @@ import logo from './logo.svg';
 import './App.css';
 
 import MainPageComponent from './MainPage/MainPageComponent'
-import UploadPageComponent from './UploadPage/UploadPageComponent';
+import UploadComponent from './UploadPage/UploadComponent'
 
 import { Link, Switch, Route } from 'react-router-dom'
 import Container from 'react-bootstrap/Container'
 import Navbar from 'react-bootstrap/Navbar'
+import DisplayComponent from './DisplayComponent.js/DisplayComponent';
 
 function App() {
 	return (
@@ -18,10 +19,13 @@ function App() {
 			<Container fluid className="h-100 d-flex">
 				<Switch>
 					<Route path="/upload">
-						<UploadPageComponent></UploadPageComponent>
+						<UploadComponent/>
 					</Route>
-					<Route path="/">
-						<MainPageComponent></MainPageComponent>
+					<Route path="/display">
+						<DisplayComponent/>
+					</Route>
+					<Route path="/" exact={true}>
+						<MainPageComponent/>
 					</Route>
 				</Switch>
 			</Container>

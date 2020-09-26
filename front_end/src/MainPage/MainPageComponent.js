@@ -17,7 +17,7 @@ export default class MainPageComponent extends React.Component {
                 <p>
                     More random ttext here for whatever use case or informationt that we may need in this case because of this project here. 
                 </p>
-                <Button><Link to="/upload">Upload</Link></Button>
+                <Button><Link to="/upload/1">Upload</Link></Button>
             </Container>
         )
     }
