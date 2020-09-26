@@ -1,9 +1,9 @@
 import os
-from flask import Flask, request
+from flask import Flask, request, send_file
 from flask_restful import Api, Resource, reqparse, abort, fields, marshal_with
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
-from image import convert_images_to_PDF, clean_cache
+from image import convert_images_to_PDF, clean_cache, create_qr_code
 from werkzeug.datastructures import FileStorage
 from flask_cors import CORS, cross_origin
 
@@ -98,11 +98,10 @@ class QR(Resource):
         if not result:
             abort(404, message="Could not find the media with that id")
 
-        path = result.path
+        path = result.file_address
+        create_qr_code(path)
 
-        return {'title':result.title,
-                'path':result.file_address,
-                'views':result.views}, 201
+        return send_file("cache/qr.png", as_attachment=True)
 
 # Use Case 2 - access the uploaded media
 class View(Resource):
