@@ -12,85 +12,74 @@ import FilePreview from 'react-preview-file'
 import { Link } from 'react-router-dom'
 import { useDropzone } from 'react-dropzone'
 
-export default function UploadFileComponent(props) {
-
-    const { acceptedFiles, getRootProps, getInputProps, } = useDropzone({
-        accept: 'image/jpeg, image/png, image/pdf',
-        multiple: true
-    });
-
-    const files = acceptedFiles.map(file => (
-        <li key={file.path}>
-            {file.path} - {file.size} bytes
-        </li>
-    ));
-
-    const handleSubmit = (evt) => {
-        evt.preventDefault()
-        let formData = new FormData()
-        formData.append('files', files[0])
-        formData.append('order', 0)
-        const requestOptions = {
-            method: 'POST',
-            body: formData
-        };
-        console.log(files[0])
-        fetch('https://04b67290a263b0349d74b42d4c23cbec.m.pipedream.net', requestOptions)
+export default class UploadFileComponent extends React.Component {
+    constructor(props) {
+        super(); this.state = { value: '' };
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    return (
-        <Container>
-            <h1>Upload your menu</h1>
-            <p>Acceptable media formats include pdf, png, and jpg</p>
 
-            <Card className="border-1">
-                <Card className="border-0 mt-5 mx-5 justify-content-center">
-                    <Card {...getRootProps({ className: 'dropzone' })}>
-                        <input {...getInputProps()} />
-                        <p>Drag 'n' drop some files here, or click to select files</p>
-                    </Card>
+    handleSubmit(evt) {
+        evt.preventDefault()
+
+        const files = this.state.value
+        console.log(files)
+
+        let formData = new FormData()
+
+        Object.keys(files).forEach(function (key) {
+            console.log(key)
+
+            formData.append("file", files[key])
+
+        });
+
+        // formData.append("file", files[0])
+
+        // Display the key/value pairs
+        for (var pair of formData.entries()) {
+            console.log(pair[1]);
+        }
+
+        console.log(formData.getAll)
+
+        const requestOptions = {
+            method: 'PUT',
+            body: formData
+        };
+        fetch('https://155.138.150.43:5000/upload', requestOptions)
+    }
+
+    handleChange(evt) {
+        this.setState({ value: evt.target.files })
+    }
+
+    render() {
+        // const { acceptedFiles, getRootProps, getInputProps, } = useDropzone({
+        //     accept: 'image/jpeg, image/png, image/pdf',
+        //     multiple: true
+        // });
+
+        // const files = acceptedFiles.map(file => (
+        //     <li key={file.path}>
+        //         {file.path} - {file.size} bytes
+        //     </li>
+        // ));
+        return (
+            <Container>
+                <h1>Upload your menu</h1>
+                <p>Acceptable media formats include pdf, png, and jpg</p>
+
+                <Form onSubmit={this.handleSubmit}>
                     <Card>
-                        <p>Files</p>
-                        <ul>{files}</ul>
-                    </Card>
-                </Card>
-                <Form onSubmit={handleSubmit}>
-                    <Button type="submit">
-                        Upload
+                        <Form.File onChange={this.handleChange} multiple id="uploadFiles" label="Upload Files"></Form.File>
+                        <Button className="mx-auto mt-5" type="submit">
+                            Upload
                     </Button>
+                    </Card>
                 </Form>
-            </Card>
-
-            <Row className="mt-5 d-flex flex-wrap">
-                <Col>
-                    <Card className="">
-                        <h1>Some text here</h1>
-                        <p>Some details here</p>
-                    </Card>
-                </Col>
-                <Col>
-                    <Card>
-                        <h1>Some text here</h1>
-                        <p>Some details here</p>
-                    </Card>
-                </Col>
-                <Col>
-                    <Card>
-                        <h1>Some text here</h1>
-                        <p>Some details here</p>
-                    </Card>
-                </Col>
-            </Row>
-
-            <Row className="justify-content-between">
-                <Button>
-                    <Link to="/">Home</Link>
-                </Button>
-                <Button>
-                    <Link to="/upload/2">Next Step</Link>
-                </Button>
-            </Row>
-        </Container>
-    )
-
+            </Container>
+        )
+    }
 }
