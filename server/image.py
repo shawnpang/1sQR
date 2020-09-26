@@ -1,5 +1,6 @@
-import sys, fitz
+import fitz
 import os
+import qrcode
 
 def convert_images_to_PDF(img_dic, id):
     img_list = []
@@ -31,7 +32,20 @@ def clean_cache():
 
     # Move the pdf media to media folder
 
+def create_qr_code(path):
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=10,
+        border=4,
+    )
+    qr.add_data(path)
+    qr.make(fit=True)
 
+    img = qr.make_image(fill_color="black", back_color="white")
+    with open('cache/qr.png', 'wb') as f:
+        img.save(f)
+    pass
 
 if __name__ == "__main__":
-    clean_cache()
+    create_qr_code("media/1000.pdf")

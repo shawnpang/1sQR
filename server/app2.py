@@ -5,7 +5,6 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 from image import convert_images_to_PDF, clean_cache
 from werkzeug.datastructures import FileStorage
-import tarfile
 
 
 # Initialize the REST app and database
@@ -42,7 +41,7 @@ resource_fields = {
     'id': fields.Integer,
     'title': fields.String,
     'access_code': fields.Integer,
-    'likes': fields.Integer,
+    'views': fields.Integer,
     'file_address':fields.String
 }
 
@@ -93,8 +92,33 @@ class Upload(Resource):
 
 
 # Use Case 2 - access the uploaded media
+class QR(Resource):
+    def get(self, media_id):
+        result = MediaModel.query.filter_by(id=media_id).first()
+        if not result:
+            abort(404, message="Could not find the media with that id")
+
+        path = result.path
+
+        return {'title':result.title,
+                'path':result.file_address,
+                'views':result.views}, 201
+
+# Use Case 2 - access the uploaded media
 class View(Resource):
-    pass
+    def get(self, media_id):
+        result = MediaModel.query.filter_by(id=media_id).first()
+        if not result:
+            abort(404, message="Could not find the media with that id")
+
+        result.views = result.views+1
+        db.session.add(result)
+        db.session.commit()
+
+        return {'title':result.title,
+                'path':result.file_address,
+                'views':result.views}, 201
+
 
 
 # Use Case 3 - manage the media with access code to update or delete
@@ -115,11 +139,13 @@ class Manage(Resource):
 
 
 api.add_resource(Upload, "/upload")
-api.add_resource(View, "/view/<int:id>")
-api.add_resource(Manage, "/manage/<int:id>")
+api.add_resource(QR, "/qr/<int:media_id>")
+api.add_resource(View, "/view/<int:media_id>")
+api.add_resource(Manage, "/manage/<int:media_id>")
 api.add_resource(Test, "/test")
 
 
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0')
+    # app.run(debug=True, host='0.0.0.0')
+    app.run(debug=True)
     print("Done!")
