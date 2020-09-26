@@ -28,12 +28,14 @@ export default function UploadFileComponent(props) {
     const handleSubmit = (evt) => {
         evt.preventDefault()
         let formData = new FormData()
-        formData.append('files', files)
+        formData.append('files', files[0])
+        formData.append('order', 0)
         const requestOptions = {
             method: 'POST',
             body: formData
         };
-        fetch('/upload', requestOptions)
+        console.log(files[0])
+        fetch('https://04b67290a263b0349d74b42d4c23cbec.m.pipedream.net', requestOptions)
     }
 
     return (
@@ -42,7 +44,7 @@ export default function UploadFileComponent(props) {
             <p>Acceptable media formats include pdf, png, and jpg</p>
 
             <Card className="border-1">
-                <Card className="border-0 m-5 justify-content-center">
+                <Card className="border-0 mt-5 mx-5 justify-content-center">
                     <Card {...getRootProps({ className: 'dropzone' })}>
                         <input {...getInputProps()} />
                         <p>Drag 'n' drop some files here, or click to select files</p>
@@ -59,7 +61,7 @@ export default function UploadFileComponent(props) {
                 </Form>
             </Card>
 
-            <Row className="m-5 d-flex flex-wrap">
+            <Row className="mt-5 d-flex flex-wrap">
                 <Col>
                     <Card className="">
                         <h1>Some text here</h1>
@@ -81,10 +83,10 @@ export default function UploadFileComponent(props) {
             </Row>
 
             <Row className="justify-content-between">
-                <Button className="align-self-end">
+                <Button>
                     <Link to="/">Home</Link>
                 </Button>
-                <Button className="align-self-end">
+                <Button>
                     <Link to="/upload/2">Next Step</Link>
                 </Button>
             </Row>

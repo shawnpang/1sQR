@@ -13,6 +13,10 @@ body {
   height: 100%
 }
 
+p, h1 {
+  color: white
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
@@ -23,9 +27,20 @@ a {
   color: black
 }
 
-a:hover {
-  text-decoration: none;
+.btn > a {
   color: white
+}
+
+a:hover, .btn > a:hover {
+  text-decoration: none;
+  color: black
+}
+
+.btn {
+  margin: 3rem !important;
+  padding: 0.5rem 3rem !important;
+  border-radius: 3rem;
+  color:white !important
 }
 
 .bg-primary  {

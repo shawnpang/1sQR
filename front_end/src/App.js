@@ -12,10 +12,7 @@ import DisplayComponent from './DisplayComponent/DisplayComponent';
 
 function App() {
 	return (
-		<Container fluid className="main-body">
-			{/* <Navbar className="bg-primary">
-				<Link to="/">Home</Link>
-			</Navbar> */}
+		<Container fluid className="main-body w-100">
 			<Container fluid className="h-100 d-flex">
 				<Switch>
 					<Route path="/upload">
