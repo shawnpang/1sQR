@@ -15,7 +15,7 @@ db = SQLAlchemy(app)
 
 # Define the structure for the database that stores all the media
 class MediaModel(db.Model):
-    # ID is the randomly assigned unique of the media
+    # ID is the randomly assigned unique index of the media
     id = db.Column(db.Integer, primary_key=True)
     # File address is the relative file address of the media's pdf file
     file_address = db.Column(db.String(150), nullable=False)
@@ -57,22 +57,24 @@ class Upload(Resource):
         # Generate an ID for the new uploaded media
         id = last_id + 1
 
+        #CHECK HERE!!!!!
         # Save all the images in the cache folder
         image = request.files['image']
         file_name = secure_filename(image.filename)
         image.save(os.path.join(UPLOAD_DIRECTORY, file_name))
 
-        image_address = []
+        images_address = []
+        # Example:
+        # [0:"cache/IMAGE888.jpg",1:"cache/SHAWN.jpg"]
 
         # Call image converting function to convert pages
-        pdf_file_address = convertImagesToPDF(image_address)
+        pdf_file_address = convertImagesToPDF(images_address)
 
 
         media = MediaModel(id=id, name="", views=0, access_code = "", file_address=pdf_file_address)
         db.session.add(media)
         db.session.commit()
         return media, 201
-
 
 api.add_resource(Upload, "/upload")
 
