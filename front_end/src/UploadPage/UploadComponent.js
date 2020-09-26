@@ -10,7 +10,7 @@ import UploadFileComponent from './UploadFileComponent'
 export default class UploadComponent extends React.Component {
     render() {
         return(
-            <Container>
+            <Container className="pt-5">
                 <Switch>
                     <Route exact path="/upload"/>
                     <Route path="/upload/3">
