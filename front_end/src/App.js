@@ -8,14 +8,14 @@ import UploadComponent from './UploadPage/UploadComponent'
 import { Link, Switch, Route } from 'react-router-dom'
 import Container from 'react-bootstrap/Container'
 import Navbar from 'react-bootstrap/Navbar'
-import DisplayComponent from './DisplayComponent.js/DisplayComponent';
+import DisplayComponent from './DisplayComponent/DisplayComponent';
 
 function App() {
 	return (
 		<Container fluid className="main-body">
-			<Navbar className="bg-primary">
+			{/* <Navbar className="bg-primary">
 				<Link to="/">Home</Link>
-			</Navbar>
+			</Navbar> */}
 			<Container fluid className="h-100 d-flex">
 				<Switch>
 					<Route path="/upload">

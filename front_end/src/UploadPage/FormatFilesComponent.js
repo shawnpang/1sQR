@@ -2,11 +2,8 @@ import React from 'react'
 
 import Container from 'react-bootstrap/Container'
 import Card from 'react-bootstrap/Card'
-import Pagination from 'react-bootstrap/Pagination'
 import Button from 'react-bootstrap/Button'
 import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Navbar from 'react-bootstrap/Navbar'
 import { Link } from 'react-router-dom'
 
 export default class FormatFilesComponent extends React.Component {
