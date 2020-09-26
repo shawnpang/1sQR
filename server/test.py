@@ -1,7 +1,7 @@
 import requests
 
-BASE = "http://127.0.0.1:5000"
-
+# BASE = "http://127.0.0.1:5000"
+BASE = "http://155.138.150.43:5000/"
 
 files = {"1" : open('C:/Users/14166/Desktop/sample.png', 'rb'),
          "2" : open('C:/Users/14166/Desktop/sample2.png', 'rb'),}
